@@ -200,8 +200,8 @@
     </div>
     <div class="row-two">
       <div class="field-group">
-        <div class="field-label">UDISE कोड <span class="req">*</span></div>
-        <input type="tel" id="udise" placeholder="11-digit UDISE code" maxlength="11">
+        <div class="field-label">UDISE कोड <span style="font-size:10px;color:#888;">(optional)</span></div>
+        <input type="tel" id="udise" placeholder="11-digit UDISE code (optional)" maxlength="11">
         <div class="field-error" id="err-udise">11 अंकों का UDISE कोड डालें।</div>
       </div>
       <div class="field-group">
@@ -296,9 +296,9 @@
       '<div class="field-error" id="err-' + id + '">Required. English only.</div></div>';
   }
   function fgEmail(id) {
-    return '<div class="field-group"><div class="field-label">Email ID *</div>' +
-      '<input type="email" id="' + id + '" placeholder="name@example.com">' +
-      '<div class="field-error" id="err-' + id + '">Valid email required.</div></div>';
+    return '<div class="field-group"><div class="field-label">Email ID</div>' +
+      '<input type="email" id="' + id + '" placeholder="name@example.com (optional)">' +
+      '<div class="field-error" id="err-' + id + '">Valid email format required.</div></div>';
   }
   function fgMob(id) {
     return '<div class="field-group"><div class="field-label">Mobile No. *</div>' +
@@ -369,7 +369,7 @@
     function pass(id) { setErr(id,false); }
 
     if (!val('district'))          { fail('district'); } else { pass('district'); }
-    if (!isValidUdise(val('udise'))){ fail('udise');   } else { pass('udise'); }
+    if (val('udise') && !isValidUdise(val('udise'))) { fail('udise'); } else { pass('udise'); }
     if (!isEnglish(val('school'))) { fail('school');   } else { pass('school'); }
 
     if (!activeClass) {
@@ -385,7 +385,7 @@
           var p = cardId+'_'+subj.key+'_'+n;
           if (!isEnglish(val(p+'_name')))     { fail(p+'_name');  } else { pass(p+'_name'); }
           if (!isEnglish(val(p+'_desig')))    { fail(p+'_desig'); } else { pass(p+'_desig'); }
-          if (!isValidEmail(val(p+'_email'))) { fail(p+'_email'); } else { pass(p+'_email'); }
+          if (val(p+'_email') && !isValidEmail(val(p+'_email'))) { fail(p+'_email'); } else { pass(p+'_email'); }
           if (!isValidMob(val(p+'_mob')))     { fail(p+'_mob');   } else { pass(p+'_mob'); }
         });
       });

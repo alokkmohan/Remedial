@@ -20,23 +20,13 @@ function getOrCreateSpreadsheet() {
 function getOrCreateDataSheet(ss) {
   var sheet = ss.getSheetByName('KRP डेटा');
   if (!sheet) {
-    // Remove default blank sheet if empty
     var defaultSheet = ss.getSheetByName('Sheet1');
-
     sheet = ss.insertSheet('KRP डेटा');
 
     var headers = [
-      'दिनांक',
-      'जनपद',
-      'UDISE कोड',
-      'विद्यालय / संस्थान',
-      'कक्षा',
-      'विषय',
-      'क्र.सं.',
-      'अध्यापक / अध्यापिका का नाम',
-      'पदनाम',
-      'ई-मेल',
-      'मोबाइल नं.'
+      'दिनांक', 'जनपद', 'UDISE कोड', 'विद्यालय / संस्थान',
+      'कक्षा', 'विषय', 'KRP प्रकार',
+      'अध्यापक / अध्यापिका का नाम', 'पदनाम', 'ई-मेल', 'मोबाइल नं.'
     ];
     sheet.appendRow(headers);
 
@@ -53,7 +43,7 @@ function getOrCreateDataSheet(ss) {
     sheet.setColumnWidth(4, 250);
     sheet.setColumnWidth(5, 90);
     sheet.setColumnWidth(6, 140);
-    sheet.setColumnWidth(7, 60);
+    sheet.setColumnWidth(7, 80);
     sheet.setColumnWidth(8, 250);
     sheet.setColumnWidth(9, 150);
     sheet.setColumnWidth(10, 200);
@@ -101,9 +91,10 @@ function submitForm(formData) {
         var krps = classData[subj.key] || [];
         krps.forEach(function (krp, idx) {
           if (krp.name) {
+            var krpType = idx === 0 ? 'School' : 'DIET';
             sheet.appendRow([
               timestamp, district, udise, school,
-              className, subj.name, idx + 1,
+              className, subj.name, krpType,
               krp.name || '', krp.designation || '',
               krp.email || '', krp.mobile || ''
             ]);
@@ -145,6 +136,28 @@ function doPost(e) {
       .createTextOutput(JSON.stringify({ success: false, message: err.message }))
       .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+// --------------- Excel Download Menu ---------------
+
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('KRP Tools')
+    .addItem('Excel mein Download karein (.xlsx)', 'downloadAsExcel')
+    .addToUi();
+}
+
+function downloadAsExcel() {
+  var ss = getOrCreateSpreadsheet();
+  var id = ss.getId();
+  var url = 'https://docs.google.com/spreadsheets/d/' + id + '/export?format=xlsx&id=' + id;
+  var html = HtmlService.createHtmlOutput(
+    '<script>' +
+    'window.open("' + url + '");' +
+    'google.script.host.close();' +
+    '</script>'
+  ).setWidth(1).setHeight(1);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Downloading...');
 }
 
 // --------------- Admin: Get Sheet URL ---------------

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>के.आर.पी. सूचना फॉर्म</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans Devanagari', Arial, sans-serif;
+      background: #f0f2f5;
+      color: #222;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+      color: #fff;
+      padding: 22px 20px 18px;
+      text-align: center;
+    }
+    .header h1 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .header p  { font-size: 13px; opacity: 0.85; }
+
+    .container { max-width: 980px; margin: 24px auto; padding: 0 14px 50px; }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a237e;
+      border-bottom: 2px solid #e8eaf6;
+      padding-bottom: 10px;
+      margin-bottom: 18px;
+    }
+
+    /* School grid */
+    .row-full { margin-bottom: 14px; }
+    .row-two  { display: grid; grid-template-columns: 200px 1fr; gap: 14px; }
+
+    /* Class filter pills */
+    .filter-group {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .filter-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 17px;
+      font-weight: 700;
+      padding: 14px 32px;
+      border: 2.5px solid #c5cae9;
+      border-radius: 50px;
+      background: #f5f5f5;
+      color: #555;
+      transition: all 0.22s;
+      user-select: none;
+      letter-spacing: 0.3px;
+    }
+    .filter-pill:hover {
+      border-color: #5c6bc0;
+      background: #e8eaf6;
+      color: #1a237e;
+    }
+    .filter-pill.selected {
+      border-color: #1a237e;
+      background: #1a237e;
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(26,35,126,0.25);
+    }
+    .filter-pill .pill-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+    .filter-pill.selected .pill-dot { opacity: 1; }
+
+    .tab-content        { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Subject block */
+    .subject-block { border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 14px; overflow: hidden; }
+    .subject-header { background: #e8eaf6; padding: 10px 15px; font-weight: 700; color: #1a237e; }
+    .subject-body { padding: 14px 15px 8px; }
+
+    /* KRP row */
+    .krp-row {
+      display: grid;
+      grid-template-columns: 30px 1fr 1fr 1fr 1fr;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+    .krp-num {
+      width: 28px; height: 28px;
+      background: #1a237e; color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; flex-shrink: 0;
+      margin-bottom: 3px;
+    }
+
+    /* Fields */
+    .field-group { display: flex; flex-direction: column; }
+    .field-label {
+      font-size: 11px; color: #555;
+      margin-bottom: 4px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .field-label .req { color: #c62828; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      background: #fafafa;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    select {
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231a237e' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px; cursor: pointer;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #1a237e;
+      box-shadow: 0 0 0 3px rgba(26,35,126,0.1);
+      background: #fff;
+    }
+    input::placeholder { color: #bbb; font-size: 12px; font-style: italic; }
+
+    /* Validation states */
+    input.invalid, select.invalid { border-color: #e53935 !important; background: #fff8f8; }
+    .field-error { font-size: 11px; color: #e53935; margin-top: 3px; display: none; }
+    .field-error.show { display: block; }
+
+    /* English-only hint */
+    .eng-hint {
+      font-size: 10px; color: #888; margin-top: 2px;
+      font-style: italic;
+    }
+
+    /* Submit */
+    .submit-btn {
+      background: #1a237e; color: #fff;
+      border: none; padding: 14px;
+      border-radius: 8px; font-size: 16px;
+      font-weight: 700; font-family: inherit;
+      cursor: pointer; width: 100%;
+      transition: background 0.25s;
+    }
+    .submit-btn:hover    { background: #283593; }
+    .submit-btn:disabled { background: #9e9e9e; cursor: not-allowed; }
+
+    .reset-btn {
+      background: transparent;
+      border: 2px solid #1a237e; color: #1a237e;
+      padding: 10px; border-radius: 8px;
+      font-size: 14px; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+      width: 100%; margin-top: 10px;
+      display: none; transition: all 0.25s;
+    }
+    .reset-btn:hover { background: #e8eaf6; }
+
+    .msg {
+      padding: 13px 16px; border-radius: 8px;
+      margin-top: 14px; display: none;
+      font-size: 14px; font-weight: 600;
+    }
+    .msg.success { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+    .msg.error   { background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; }
+    .sheet-link  { display:inline-block; margin-top:8px; color:#1565c0; font-size:13px; text-decoration:underline; }
+
+    .note-box {
+      background: #fff8e1; border-left: 4px solid #ffa000;
+      padding: 10px 14px; border-radius: 6px;
+      font-size: 13px; color: #5d4037; margin-bottom: 18px;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      .row-two { grid-template-columns: 1fr; }
+      .krp-row { grid-template-columns: 28px 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .krp-row { grid-template-columns: 28px 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>उपचारात्मक शिक्षण मॉड्यूल की समीक्षा / परिमार्जन हेतु</h1>
+  <p>के.आर.पी. (Key Resource Person) सूचना फॉर्म &nbsp;|&nbsp; Samagra Shiksha Madhyamik, UP</p>
+</div>
+
+<div class="container">
+
+  <!-- School Info -->
+  <div class="card">
+    <div class="card-title">विद्यालय की जानकारी &nbsp;<span style="font-size:12px;font-weight:400;color:#e53935;">* सभी फ़ील्ड अनिवार्य हैं</span></div>
+
+    <div class="note-box">
+      &#9432;&nbsp; कृपया <strong>नाम, पदनाम</strong> आदि <strong>English</strong> में भरें &nbsp;|&nbsp;
+      <strong>मोबाइल नंबर</strong> ठीक 10 अंकों का होना चाहिए &nbsp;|&nbsp;
+      <strong>ई-मेल</strong> सही format में भरें (जैसे name@gmail.com)
+    </div>
+
+    <!-- Row 1: District -->
+    <div class="row-full">
+      <div class="field-group">
+        <div class="field-label">जनपद <span class="req">*</span></div>
+        <select id="district">
+          <option value="">-- जनपद चुनें --</option>
+          <option>Agra</option><option>Aligarh</option><option>Ambedkar Nagar</option>
+          <option>Amethi</option><option>Amroha</option><option>Auraiya</option>
+          <option>Ayodhya</option><option>Azamgarh</option><option>Badaun</option>
+          <option>Bagpat</option><option>Bahraich</option><option>Ballia</option>
+          <option>Balrampur</option><option>Banda</option><option>Barabanki</option>
+          <option>Bareilly</option><option>Basti</option><option>Bhadohi</option>
+          <option>Bijnor</option><option>Bulandshahr</option><option>Chandauli</option>
+          <option>Chitrakoot</option><option>Deoria</option><option>Etah</option>
+          <option>Etawah</option><option>Farrukhabad</option><option>Fatehpur</option>
+          <option>Firozabad</option><option>Gautam Buddha Nagar</option><option>Ghaziabad</option>
+          <option>Ghazipur</option><option>Gonda</option><option>Gorakhpur</option>
+          <option>Hamirpur</option><option>Hapur</option><option>Hardoi</option>
+          <option>Hathras</option><option>Jalaun</option><option>Jaunpur</option>
+          <option>Jhansi</option><option>Kannauj</option><option>Kanpur Dehat</option>
+          <option>Kanpur Nagar</option><option>Kasganj</option><option>Kaushambi</option>
+          <option>Kushinagar</option><option>Lakhimpur Kheri</option><option>Lalitpur</option>
+          <option>Lucknow</option><option>Maharajganj</option><option>Mahoba</option>
+          <option>Mainpuri</option><option>Mathura</option><option>Mau</option>
+          <option>Meerut</option><option>Mirzapur</option><option>Moradabad</option>
+          <option>Muzaffarnagar</option><option>Pilibhit</option><option>Pratapgarh</option>
+          <option>Prayagraj</option><option>Raebareli</option><option>Rampur</option>
+          <option>Saharanpur</option><option>Sambhal</option><option>Sant Kabir Nagar</option>
+          <option>Shahjahanpur</option><option>Shamli</option><option>Shravasti</option>
+          <option>Siddharthnagar</option><option>Sitapur</option><option>Sonbhadra</option>
+          <option>Sultanpur</option><option>Unnao</option><option>Varanasi</option>
+        </select>
+        <div class="field-error" id="err-district">कृपया जनपद चुनें।</div>
+      </div>
+    </div>
+
+    <!-- Row 2: UDISE + School -->
+    <div class="row-two">
+      <div class="field-group">
+        <div class="field-label">UDISE कोड <span class="req">*</span></div>
+        <input type="tel" id="udise" placeholder="11-digit UDISE code" maxlength="11">
+        <div class="field-error" id="err-udise">11 अंकों का UDISE कोड डालें।</div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">School / Institution Name <span class="req">*</span></div>
+        <input type="text" id="school" placeholder="Full name in English" class="eng-field">
+        <div class="field-error" id="err-school">School का नाम English में भरें।</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Class Selection -->
+  <div class="card">
+    <div class="card-title">विद्यालय में कौन सी कक्षाएं हैं? <span style="font-size:12px;font-weight:400;color:#e53935;">* एक या दोनों चुनें</span></div>
+    <div class="filter-group">
+      <div class="filter-pill" id="pill9" onclick="selectClass('9')">
+        <span class="pill-dot"></span> कक्षा-9
+      </div>
+      <div class="filter-pill" id="pill11" onclick="selectClass('11')">
+        <span class="pill-dot"></span> कक्षा-11
+      </div>
+    </div>
+    <div class="field-error" id="err-class" style="margin-top:12px;">कृपया कम से कम एक कक्षा चुनें।</div>
+  </div>
+
+  <!-- KRP Sections -->
+  <div id="krpSection" style="display:none;">
+
+    <!-- Class 9 -->
+    <div id="class9" class="tab-content">
+      <div class="card" id="card9">
+        <div class="card-title">कक्षा-9 उपचारात्मक शिक्षण मॉड्यूल समीक्षा / परिमार्जन हेतु नामित के. आर. पी.</div>
+      </div>
+    </div>
+
+    <!-- Class 11 -->
+    <div id="class11" class="tab-content">
+      <div class="card" id="card11">
+        <div class="card-title">कक्षा-11 उपचारात्मक शिक्षण मॉड्यूल समीक्षा / परिमार्जन हेतु नामित के. आर. पी.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Submit -->
+  <div class="card">
+    <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">डेटा सहेजें / Submit</button>
+    <button class="reset-btn" id="resetBtn"   onclick="resetForm()">नया विद्यालय / New School</button>
+    <div id="msg" class="msg"></div>
+  </div>
+
+</div>
+
+<script>
+  var subjects9 = [
+    { key: 'hindi',    label: 'Hindi (हिन्दी)' },
+    { key: 'english9', label: 'English (अंग्रेजी)' },
+    { key: 'math9',    label: 'Mathematics (गणित)' },
+    { key: 'science',  label: 'Science (विज्ञान)' }
+  ];
+  var subjects11 = [
+    { key: 'english11', label: 'English (अंग्रेजी)' },
+    { key: 'math11',    label: 'Mathematics (गणित)' },
+    { key: 'physics',   label: 'Physics (भौतिक विज्ञान)' },
+    { key: 'chemistry', label: 'Chemistry (रसायन विज्ञान)' },
+    { key: 'biology',   label: 'Biology (जीव विज्ञान)' }
+  ];
+
+  /* ---- Build form on load ---- */
+  window.onload = function () {
+    buildForm('card9',  subjects9);
+    buildForm('card11', subjects11);
+    attachEngFilter();
+    attachNumFilter();
+  };
+
+  function buildForm(cardId, subjects) {
+    var card = document.getElementById(cardId);
+    subjects.forEach(function (subj) {
+      var block = document.createElement('div');
+      block.className = 'subject-block';
+      block.innerHTML =
+        '<div class="subject-header">' + subj.label + '</div>' +
+        '<div class="subject-body">' +
+          krpRowHtml(cardId, subj.key, 1) +
+          krpRowHtml(cardId, subj.key, 2) +
+        '</div>';
+      card.appendChild(block);
+    });
+  }
+
+  function krpRowHtml(cardId, subjKey, num) {
+    var p = cardId + '_' + subjKey + '_' + num;
+    var nameLabel = num === 1 ? 'Teacher Name *' : 'Teacher Name (DIET) *';
+    return '<div class="krp-row">' +
+      '<div class="krp-num">' + num + '</div>' +
+      fgEng(p + '_name',  'text',  nameLabel,          'Full name in English') +
+      fgEng(p + '_desig', 'text',  'Designation *',    'e.g. Lecturer / Sahayak Adhyapak') +
+      fgEmail(p + '_email') +
+      fgMob(p + '_mob') +
+    '</div>';
+  }
+
+  function fgEng(id, type, label, ph) {
+    return '<div class="field-group">' +
+      '<div class="field-label">' + label + '</div>' +
+      '<input type="' + type + '" id="' + id + '" placeholder="' + ph + '" class="eng-field">' +
+      '<div class="field-error" id="err-' + id + '">Required. English only.</div>' +
+    '</div>';
+  }
+  function fgEmail(id) {
+    return '<div class="field-group">' +
+      '<div class="field-label">Email ID *</div>' +
+      '<input type="email" id="' + id + '" placeholder="name@example.com">' +
+      '<div class="field-error" id="err-' + id + '">Valid email required.</div>' +
+    '</div>';
+  }
+  function fgMob(id) {
+    return '<div class="field-group">' +
+      '<div class="field-label">Mobile No. *</div>' +
+      '<input type="tel" id="' + id + '" placeholder="10-digit mobile" maxlength="10" class="num-field">' +
+      '<div class="field-error" id="err-' + id + '">10-digit mobile required.</div>' +
+    '</div>';
+  }
+
+  /* ---- English-only filter ---- */
+  function attachEngFilter() {
+    document.addEventListener('input', function (e) {
+      if (e.target.classList.contains('eng-field')) {
+        var cursor = e.target.selectionStart;
+        var cleaned = e.target.value.replace(/[^\x00-\x7F]/g, '');
+        if (cleaned !== e.target.value) {
+          e.target.value = cleaned;
+          e.target.setSelectionRange(cursor - 1, cursor - 1);
+        }
+      }
+    });
+  }
+
+  /* ---- Digits-only filter ---- */
+  function attachNumFilter() {
+    document.addEventListener('input', function (e) {
+      if (e.target.classList.contains('num-field') || e.target.id === 'udise') {
+        e.target.value = e.target.value.replace(/\D/g, '');
+      }
+    });
+  }
+
+  /* ---- Radio pill logic (single select) ---- */
+  var activeClass = null; // '9' or '11'
+
+  function selectClass(cls) {
+    if (activeClass === cls) return; // already selected
+    activeClass = cls;
+
+    document.getElementById('pill9').classList.toggle('selected',  cls === '9');
+    document.getElementById('pill11').classList.toggle('selected', cls === '11');
+
+    var c9  = document.getElementById('class9');
+    var c11 = document.getElementById('class11');
+
+    document.getElementById('krpSection').style.display = 'block';
+    document.getElementById('err-class').classList.remove('show');
+
+    // Clear save message when switching class
+    var msg = document.getElementById('msg');
+    msg.style.display = 'none';
+
+    // Show only the selected section (no tabs needed)
+    if (cls === '9') {
+      c9.classList.add('active');
+      c11.classList.remove('active');
+    } else {
+      c11.classList.add('active');
+      c9.classList.remove('active');
+    }
+
+    // Re-enable submit button (in case it was hidden after previous save)
+    var btn = document.getElementById('submitBtn');
+    btn.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'डेटा सहेजें / Submit';
+    document.getElementById('resetBtn').style.display = 'none';
+  }
+
+  /* ---- Validation helpers ---- */
+  function val(id) { var el=document.getElementById(id); return el ? el.value.trim() : ''; }
+
+  function setErr(id, show) {
+    var errEl = document.getElementById('err-' + id);
+    var inEl  = document.getElementById(id);
+    if (errEl) errEl.classList.toggle('show', show);
+    if (inEl)  inEl.classList.toggle('invalid', show);
+    return show;
+  }
+  function clearError(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove('show');
+  }
+
+  function isEnglish(str)    { return str.length > 0 && /^[\x00-\x7F]+$/.test(str); }
+  function isValidEmail(str) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str); }
+  function isValidMob(str)   { return /^[6-9]\d{9}$/.test(str); }
+  function isValidUdise(str) { return /^\d{11}$/.test(str); }
+
+  /* ---- Collect data ---- */
+  function collectClass(cardId, subjects) {
+    var data = {};
+    subjects.forEach(function (subj) {
+      data[subj.key] = [1,2].map(function(n) {
+        var p = cardId + '_' + subj.key + '_' + n;
+        return {
+          name:        val(p + '_name'),
+          designation: val(p + '_desig'),
+          email:       val(p + '_email'),
+          mobile:      val(p + '_mob')
+        };
+      });
+    });
+    return data;
+  }
+
+  /* ---- Validate all fields ---- */
+  function validateAll() {
+    var ok = true;
+    var firstErr = null;
+
+    function fail(id) {
+      setErr(id, true);
+      ok = false;
+      if (!firstErr) firstErr = document.getElementById(id);
+    }
+    function pass(id) { setErr(id, false); }
+
+    // School info
+    if (!val('district'))         { fail('district'); } else { pass('district'); }
+    if (!isValidUdise(val('udise'))) { fail('udise');  } else { pass('udise'); }
+    if (!isEnglish(val('school')))   { fail('school'); } else { pass('school'); }
+
+    // Class selection
+    if (!activeClass) {
+      document.getElementById('err-class').classList.add('show');
+      ok = false;
+      if (!firstErr) firstErr = document.getElementById('pill9');
+    } else {
+      document.getElementById('err-class').classList.remove('show');
+    }
+
+    // Validate KRP fields for active class only
+    function validateClass(cardId, subjects) {
+      subjects.forEach(function(subj) {
+        [1,2].forEach(function(n) {
+          var p = cardId + '_' + subj.key + '_' + n;
+          if (!isEnglish(val(p+'_name')))     { fail(p+'_name');  } else { pass(p+'_name'); }
+          if (!isEnglish(val(p+'_desig')))    { fail(p+'_desig'); } else { pass(p+'_desig'); }
+          if (!isValidEmail(val(p+'_email'))) { fail(p+'_email'); } else { pass(p+'_email'); }
+          if (!isValidMob(val(p+'_mob')))     { fail(p+'_mob');   } else { pass(p+'_mob'); }
+        });
+      });
+    }
+
+    if (activeClass === '9')  validateClass('card9',  subjects9);
+    if (activeClass === '11') validateClass('card11', subjects11);
+
+    if (firstErr) firstErr.scrollIntoView({ behavior:'smooth', block:'center' });
+    return ok;
+  }
+
+  /* ---- Submit ---- */
+  function handleSubmit() {
+    if (!validateAll()) {
+      showMsg('कृपया सभी अनिवार्य फ़ील्ड सही से भरें। Invalid fields are highlighted in red.', 'error');
+      return;
+    }
+
+    var formData = {
+      district: val('district'),
+      udise:    val('udise'),
+      school:   val('school'),
+      class9:   activeClass === '9'  ? collectClass('card9',  subjects9)  : null,
+      class11:  activeClass === '11' ? collectClass('card11', subjects11) : null
+    };
+
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'सहेज रहे हैं... / Saving...';
+    document.getElementById('msg').style.display = 'none';
+
+    google.script.run
+      .withSuccessHandler(function (result) {
+        btn.disabled = false;
+        btn.textContent = 'डेटा सहेजें / Submit';
+        if (result.success) {
+          var savedClass = activeClass === '9' ? 'कक्षा-9' : 'कक्षा-11';
+          var otherClass = activeClass === '9' ? 'कक्षा-11' : 'कक्षा-9';
+          showMsg(
+            '✓ ' + savedClass + ' का डेटा सफलतापूर्वक सहेजा गया! ' +
+            '<br><small>अब filter से ' + otherClass + ' चुनकर उसका डेटा भी सहेज सकते हैं, या नीचे "नया विद्यालय" बटन दबाएं।</small>',
+            'success', result.sheetUrl
+          );
+          // Clear only this class's KRP fields
+          clearClassFields(activeClass === '9' ? 'card9' : 'card11');
+          document.getElementById('resetBtn').style.display = 'block';
+        } else {
+          showMsg('✗ ' + result.message, 'error');
+        }
+      })
+      .withFailureHandler(function (err) {
+        btn.disabled = false;
+        btn.textContent = 'डेटा सहेजें / Submit';
+        showMsg('✗ ' + (err.message || 'Unknown error occurred.'), 'error');
+      })
+      .submitForm(formData);
+  }
+
+  function showMsg(text, type, linkUrl) {
+    var el = document.getElementById('msg');
+    el.innerHTML = text;
+    if (linkUrl) {
+      el.innerHTML += '<br><a class="sheet-link" href="' + linkUrl + '" target="_blank">Google Sheet देखें / View Sheet</a>';
+    }
+    el.className = 'msg ' + type;
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function clearClassFields(cardId) {
+    var card = document.getElementById(cardId);
+    card.querySelectorAll('input').forEach(function(el){ el.value = ''; el.classList.remove('invalid'); });
+    card.querySelectorAll('.field-error').forEach(function(el){ el.classList.remove('show'); });
+  }
+
+  function resetForm() {
+    // Full reset — new school
+    document.querySelectorAll('input').forEach(function(el){ el.value=''; el.classList.remove('invalid'); });
+    document.querySelectorAll('select').forEach(function(el){ el.selectedIndex=0; });
+    document.querySelectorAll('.field-error').forEach(function(el){ el.classList.remove('show'); });
+    document.getElementById('krpSection').style.display = 'none';
+    document.getElementById('pill9').classList.remove('selected');
+    document.getElementById('pill11').classList.remove('selected');
+    document.getElementById('msg').style.display = 'none';
+    document.getElementById('msg').className = 'msg';
+    document.getElementById('submitBtn').style.display = 'block';
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('submitBtn').textContent = 'डेटा सहेजें / Submit';
+    document.getElementById('resetBtn').style.display = 'none';
+    activeClass = null;
+    window.scrollTo({ top:0, behavior:'smooth' });
+  }
+</script>
+
+</body>
+</html>

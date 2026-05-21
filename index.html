@@ -198,12 +198,7 @@
         <div class="field-error" id="err-district">कृपया जनपद चुनें।</div>
       </div>
     </div>
-    <div class="row-two">
-      <div class="field-group">
-        <div class="field-label">UDISE कोड <span style="font-size:10px;color:#888;">(optional)</span></div>
-        <input type="tel" id="udise" placeholder="11-digit UDISE code (optional)" maxlength="11">
-        <div class="field-error" id="err-udise">11 अंकों का UDISE कोड डालें।</div>
-      </div>
+    <div class="row-full">
       <div class="field-group">
         <div class="field-label">School / Institution Name <span class="req">*</span></div>
         <input type="text" id="school" placeholder="Full name in English" class="eng-field">
@@ -244,7 +239,7 @@
 
 <script>
   // ── GAS endpoint — update this URL after every new GAS deployment ──
-  var GAS_URL = 'https://script.google.com/macros/s/AKfycbx40zx3HdvUU7f5x1GlOIQXF_jXDNNZxMMtOqVqVt7qWk3keNIW0RE-8gMJIekXXUlXvw/exec';
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbyuw0Y8SSgLbBX-inOVxJlNE7RacJ_b1iZ-bfiRL8B5cVPBMAYaIxgm1AC_gsCAjgAe7Q/exec';
 
   var subjects9 = [
     { key: 'hindi',    label: 'Hindi (हिन्दी)' },
@@ -285,7 +280,7 @@
     return '<div class="krp-row">' +
       '<div class="krp-num">' + num + '</div>' +
       fgEng(p+'_name',  'text',  nameLabel,       'Full name in English') +
-      fgEng(p+'_desig', 'text',  'Designation *', 'e.g. Lecturer / Sahayak Adhyapak') +
+      fgDesig(p+'_desig') +
       fgEmail(p+'_email') + fgMob(p+'_mob') +
     '</div>';
   }
@@ -294,6 +289,11 @@
     return '<div class="field-group"><div class="field-label">' + label + '</div>' +
       '<input type="' + type + '" id="' + id + '" placeholder="' + ph + '" class="eng-field">' +
       '<div class="field-error" id="err-' + id + '">Required. English only.</div></div>';
+  }
+  function fgDesig(id) {
+    return '<div class="field-group"><div class="field-label">Designation <span class="req">*</span></div>' +
+      '<input type="text" id="' + id + '" placeholder="e.g. Lecturer / Sahayak Adhyapak" class="eng-field">' +
+      '<div class="field-error" id="err-' + id + '">Required. Min 4 chars. English only.</div></div>';
   }
   function fgEmail(id) {
     return '<div class="field-group"><div class="field-label">Email ID</div>' +
@@ -317,7 +317,7 @@
   }
   function attachNumFilter() {
     document.addEventListener('input', function (e) {
-      if (e.target.classList.contains('num-field') || e.target.id === 'udise')
+      if (e.target.classList.contains('num-field'))
         e.target.value = e.target.value.replace(/\D/g, '');
     });
   }
@@ -348,9 +348,9 @@
   }
 
   function isEnglish(s)    { return s.length > 0 && /^[\x00-\x7F]+$/.test(s); }
+  function isValidDesig(s) { return s.length >= 4 && /^[\x00-\x7F]+$/.test(s); }
   function isValidEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
   function isValidMob(s)   { return /^[6-9]\d{9}$/.test(s); }
-  function isValidUdise(s) { return /^\d{11}$/.test(s); }
 
   function collectClass(cardId, subjects) {
     var data = {};
@@ -369,7 +369,6 @@
     function pass(id) { setErr(id,false); }
 
     if (!val('district'))          { fail('district'); } else { pass('district'); }
-    if (val('udise') && !isValidUdise(val('udise'))) { fail('udise'); } else { pass('udise'); }
     if (!isEnglish(val('school'))) { fail('school');   } else { pass('school'); }
 
     if (!activeClass) {
@@ -384,7 +383,7 @@
         [1,2].forEach(function(n) {
           var p = cardId+'_'+subj.key+'_'+n;
           if (!isEnglish(val(p+'_name')))     { fail(p+'_name');  } else { pass(p+'_name'); }
-          if (!isEnglish(val(p+'_desig')))    { fail(p+'_desig'); } else { pass(p+'_desig'); }
+          if (!isValidDesig(val(p+'_desig'))) { fail(p+'_desig'); } else { pass(p+'_desig'); }
           if (val(p+'_email') && !isValidEmail(val(p+'_email'))) { fail(p+'_email'); } else { pass(p+'_email'); }
           if (!isValidMob(val(p+'_mob')))     { fail(p+'_mob');   } else { pass(p+'_mob'); }
         });
@@ -403,7 +402,7 @@
       return;
     }
     var formData = {
-      district: val('district'), udise: val('udise'), school: val('school'),
+      district: val('district'), school: val('school'),
       class9:  activeClass === '9'  ? collectClass('card9',  subjects9)  : null,
       class11: activeClass === '11' ? collectClass('card11', subjects11) : null
     };

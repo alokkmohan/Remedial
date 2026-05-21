@@ -24,7 +24,7 @@ function getOrCreateDataSheet(ss) {
     sheet = ss.insertSheet('KRP डेटा');
 
     var headers = [
-      'दिनांक', 'जनपद', 'UDISE कोड', 'विद्यालय / संस्थान',
+      'दिनांक', 'जनपद', 'विद्यालय / संस्थान',
       'कक्षा', 'विषय', 'KRP प्रकार',
       'अध्यापक / अध्यापिका का नाम', 'पदनाम', 'ई-मेल', 'मोबाइल नं.'
     ];
@@ -39,15 +39,14 @@ function getOrCreateDataSheet(ss) {
     sheet.setFrozenRows(1);
     sheet.setColumnWidth(1, 160);
     sheet.setColumnWidth(2, 140);
-    sheet.setColumnWidth(3, 120);
-    sheet.setColumnWidth(4, 250);
-    sheet.setColumnWidth(5, 90);
-    sheet.setColumnWidth(6, 140);
-    sheet.setColumnWidth(7, 80);
-    sheet.setColumnWidth(8, 250);
-    sheet.setColumnWidth(9, 150);
-    sheet.setColumnWidth(10, 200);
-    sheet.setColumnWidth(11, 130);
+    sheet.setColumnWidth(3, 250);
+    sheet.setColumnWidth(4, 90);
+    sheet.setColumnWidth(5, 140);
+    sheet.setColumnWidth(6, 80);
+    sheet.setColumnWidth(7, 250);
+    sheet.setColumnWidth(8, 150);
+    sheet.setColumnWidth(9, 200);
+    sheet.setColumnWidth(10, 130);
 
     if (defaultSheet && defaultSheet.getName() === 'Sheet1') {
       try { ss.deleteSheet(defaultSheet); } catch (e) {}
@@ -65,7 +64,6 @@ function submitForm(formData) {
 
     var timestamp = new Date();
     var district = formData.district || '';
-    var udise    = formData.udise    || '';
     var school   = formData.school   || '';
 
     var subjects9 = [
@@ -93,7 +91,7 @@ function submitForm(formData) {
           if (krp.name) {
             var krpType = idx === 0 ? 'School' : 'DIET';
             sheet.appendRow([
-              timestamp, district, udise, school,
+              timestamp, district, school,
               className, subj.name, krpType,
               krp.name || '', krp.designation || '',
               krp.email || '', krp.mobile || ''

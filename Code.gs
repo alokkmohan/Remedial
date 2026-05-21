@@ -4,7 +4,7 @@
 // ============================================================
 
 function doGet() {
-  return HtmlService.createHtmlOutputFromFile('Index')
+  return HtmlService.createHtmlOutputFromFile('GasForm')
     .setTitle('के.आर.पी. सूचना फॉर्म — उपचारात्मक शिक्षण मॉड्यूल')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }

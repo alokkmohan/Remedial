@@ -293,8 +293,13 @@
       </div>
     </div>
 
-    <!-- Row 2: School -->
-    <div class="row-full">
+    <!-- Row 2: UDISE + School -->
+    <div class="row-two">
+      <div class="field-group">
+        <div class="field-label">UDISE कोड <span style="font-size:10px;color:#888;">(optional)</span></div>
+        <input type="tel" id="udise" placeholder="11-digit UDISE code (optional)" maxlength="11" class="num-field">
+        <div class="field-error" id="err-udise">11 अंकों का UDISE कोड डालें।</div>
+      </div>
       <div class="field-group">
         <div class="field-label">School / Institution Name <span class="req">*</span></div>
         <input type="text" id="school" placeholder="Full name in English" class="eng-field">
@@ -539,6 +544,7 @@
 
     // School info
     if (!val('district'))         { fail('district'); } else { pass('district'); }
+    if (val('udise') && !/^\d{11}$/.test(val('udise'))) { fail('udise'); } else { pass('udise'); }
     if (!isEnglish(val('school')))   { fail('school'); } else { pass('school'); }
 
     // Class selection
@@ -579,6 +585,7 @@
 
     var formData = {
       district: val('district'),
+      udise:    val('udise'),
       school:   val('school'),
       class9:   activeClass === '9'  ? collectClass('card9',  subjects9)  : null,
       class11:  activeClass === '11' ? collectClass('card11', subjects11) : null

@@ -239,7 +239,7 @@
 
 <script>
   // ── GAS endpoint — update this URL after every new GAS deployment ──
-  var GAS_URL = 'https://script.google.com/macros/s/AKfycbyuw0Y8SSgLbBX-inOVxJlNE7RacJ_b1iZ-bfiRL8B5cVPBMAYaIxgm1AC_gsCAjgAe7Q/exec';
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbx-J6VOwTdqLrsXWhHOa0PURV9HuoliC6o9DOFBUjDByjuJOdW3yDiOOBvrPHISwxdi0Q/exec';
 
   var subjects9 = [
     { key: 'hindi',    label: 'Hindi (हिन्दी)' },
@@ -292,8 +292,12 @@
   }
   function fgDesig(id) {
     return '<div class="field-group"><div class="field-label">Designation <span class="req">*</span></div>' +
-      '<input type="text" id="' + id + '" placeholder="e.g. Lecturer / Sahayak Adhyapak" class="eng-field">' +
-      '<div class="field-error" id="err-' + id + '">Required. Min 4 chars. English only.</div></div>';
+      '<select id="' + id + '">' +
+        '<option value="">-- Select Designation --</option>' +
+        '<option value="LECTURER">LECTURER</option>' +
+        '<option value="ASSISTANT TEACHER">ASSISTANT TEACHER</option>' +
+      '</select>' +
+      '<div class="field-error" id="err-' + id + '">Please select a designation.</div></div>';
   }
   function fgEmail(id) {
     return '<div class="field-group"><div class="field-label">Email ID</div>' +
@@ -348,7 +352,7 @@
   }
 
   function isEnglish(s)    { return s.length > 0 && /^[\x00-\x7F]+$/.test(s); }
-  function isValidDesig(s) { return s.length >= 4 && /^[\x00-\x7F]+$/.test(s); }
+  function isValidDesig(s) { return s.length > 0; }
   function isValidEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
   function isValidMob(s)   { return /^[6-9]\d{9}$/.test(s); }
 

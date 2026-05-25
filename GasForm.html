@@ -301,9 +301,9 @@
         <div class="field-error" id="err-udise">11 अंकों का UDISE कोड डालें।</div>
       </div>
       <div class="field-group">
-        <div class="field-label">School / Institution Name <span class="req">*</span></div>
+        <div class="field-label">DIET / Institution Name <span class="req">*</span></div>
         <input type="text" id="school" placeholder="Full name in English" class="eng-field">
-        <div class="field-error" id="err-school">School का नाम English में भरें।</div>
+        <div class="field-error" id="err-school">DIET / Institution का नाम English में भरें।</div>
       </div>
     </div>
   </div>
@@ -395,6 +395,7 @@
       '<div class="krp-num">' + num + '</div>' +
       fgEng(p + '_name',  'text',  nameLabel,          'Full name in English') +
       fgDesig(p + '_desig') +
+      fgEng(p + '_school', 'text', 'School Name <span class="req">*</span>', 'School name in English') +
       fgEmail(p + '_email') +
       fgMob(p + '_mob') +
     '</div>';
@@ -522,6 +523,7 @@
         return {
           name:        val(p + '_name'),
           designation: val(p + '_desig'),
+          schoolName:  val(p + '_school'),
           email:       val(p + '_email'),
           mobile:      val(p + '_mob')
         };
@@ -561,10 +563,11 @@
       subjects.forEach(function(subj) {
         [1,2].forEach(function(n) {
           var p = cardId + '_' + subj.key + '_' + n;
-          if (!isEnglish(val(p+'_name')))     { fail(p+'_name');  } else { pass(p+'_name'); }
-          if (!isValidDesig(val(p+'_desig')))  { fail(p+'_desig'); } else { pass(p+'_desig'); }
+          if (!isEnglish(val(p+'_name')))       { fail(p+'_name');   } else { pass(p+'_name'); }
+          if (!isValidDesig(val(p+'_desig')))   { fail(p+'_desig');  } else { pass(p+'_desig'); }
+          if (!isEnglish(val(p+'_school')))     { fail(p+'_school'); } else { pass(p+'_school'); }
           if (val(p+'_email') && !isValidEmail(val(p+'_email'))) { fail(p+'_email'); } else { pass(p+'_email'); }
-          if (!isValidMob(val(p+'_mob')))     { fail(p+'_mob');   } else { pass(p+'_mob'); }
+          if (!isValidMob(val(p+'_mob')))       { fail(p+'_mob');    } else { pass(p+'_mob'); }
         });
       });
     }

@@ -24,9 +24,9 @@ function getOrCreateDataSheet(ss) {
     sheet = ss.insertSheet('KRP डेटा');
 
     var headers = [
-      'दिनांक', 'जनपद', 'UDISE कोड', 'विद्यालय / संस्थान',
+      'दिनांक', 'जनपद', 'UDISE कोड', 'DIET / संस्थान',
       'कक्षा', 'विषय', 'KRP प्रकार',
-      'अध्यापक / अध्यापिका का नाम', 'पदनाम', 'ई-मेल', 'मोबाइल नं.'
+      'अध्यापक / अध्यापिका का नाम', 'पदनाम', 'School Name', 'ई-मेल', 'मोबाइल नं.'
     ];
     sheet.appendRow(headers);
 
@@ -46,8 +46,9 @@ function getOrCreateDataSheet(ss) {
     sheet.setColumnWidth(7, 80);
     sheet.setColumnWidth(8, 250);
     sheet.setColumnWidth(9, 150);
-    sheet.setColumnWidth(10, 200);
-    sheet.setColumnWidth(11, 130);
+    sheet.setColumnWidth(10, 220);
+    sheet.setColumnWidth(11, 200);
+    sheet.setColumnWidth(12, 130);
 
     if (defaultSheet && defaultSheet.getName() === 'Sheet1') {
       try { ss.deleteSheet(defaultSheet); } catch (e) {}
@@ -95,7 +96,7 @@ function submitForm(formData) {
             sheet.appendRow([
               timestamp, district, udise, school,
               className, subj.name, krpType,
-              krp.name || '', krp.designation || '',
+              krp.name || '', krp.designation || '', krp.schoolName || '',
               krp.email || '', krp.mobile || ''
             ]);
             rowsAdded++;

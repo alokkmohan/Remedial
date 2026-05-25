@@ -100,12 +100,14 @@
     .subject-body { padding: 14px 15px 8px; }
 
     /* KRP row */
-    .krp-row {
-      display: grid;
-      grid-template-columns: 30px 1fr 1fr 1fr 1fr;
-      gap: 10px;
-      align-items: end;
-      margin-bottom: 14px;
+    .krp-block { margin-bottom: 16px; }
+    .krp-row-top {
+      display: grid; grid-template-columns: 30px 1fr 1fr 1fr;
+      gap: 10px; align-items: end; margin-bottom: 10px;
+    }
+    .krp-row-bottom {
+      display: grid; grid-template-columns: 30px 1fr 1fr;
+      gap: 10px; align-items: end;
     }
     .krp-num {
       width: 28px; height: 28px;
@@ -205,7 +207,8 @@
     /* Responsive */
     @media (max-width: 700px) {
       .row-two { grid-template-columns: 1fr; }
-      .krp-row { grid-template-columns: 28px 1fr 1fr; }
+      .krp-row-top    { grid-template-columns: 30px 1fr 1fr; }
+      .krp-row-bottom { grid-template-columns: 30px 1fr 1fr; }
     }
 
     @media (max-width: 600px) {
@@ -217,21 +220,17 @@
       .filter-group { gap: 10px; }
       .filter-pill  { flex: 1; justify-content: center; padding: 12px 10px; font-size: 15px; }
 
-      .krp-row {
-        display: block;
+      .krp-block {
         background: #f8f9ff;
         border: 1px solid #e8eaf6;
         border-radius: 8px;
         padding: 12px 12px 4px;
         margin-bottom: 12px;
       }
-      .krp-num {
-        display: inline-flex;
-        margin-bottom: 10px;
-      }
-      .krp-row .field-group {
-        margin-bottom: 10px;
-      }
+      .krp-row-top, .krp-row-bottom { display: block; }
+      .krp-num { display: inline-flex; margin-bottom: 10px; }
+      .krp-row-top .field-group,
+      .krp-row-bottom .field-group { margin-bottom: 10px; }
 
       .note-box { font-size: 12px; }
       .submit-btn { font-size: 15px; padding: 13px; }
@@ -391,13 +390,18 @@
   function krpRowHtml(cardId, subjKey, num) {
     var p = cardId + '_' + subjKey + '_' + num;
     var nameLabel = num === 1 ? 'Teacher Name *' : 'Teacher Name (DIET) *';
-    return '<div class="krp-row">' +
-      '<div class="krp-num">' + num + '</div>' +
-      fgEng(p + '_name',  'text',  nameLabel,          'Full name in English') +
-      fgDesig(p + '_desig') +
-      fgEng(p + '_school', 'text', 'School Name <span class="req">*</span>', 'School name in English') +
-      fgEmail(p + '_email') +
-      fgMob(p + '_mob') +
+    return '<div class="krp-block">' +
+      '<div class="krp-row-top">' +
+        '<div class="krp-num">' + num + '</div>' +
+        fgEng(p + '_name', 'text', nameLabel, 'Full name in English') +
+        fgDesig(p + '_desig') +
+        fgEng(p + '_school', 'text', 'School Name <span class="req">*</span>', 'School name in English') +
+      '</div>' +
+      '<div class="krp-row-bottom">' +
+        '<div></div>' +
+        fgEmail(p + '_email') +
+        fgMob(p + '_mob') +
+      '</div>' +
     '</div>';
   }
 

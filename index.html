@@ -52,9 +52,14 @@
     .subject-block { border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 14px; overflow: hidden; }
     .subject-header { background: #e8eaf6; padding: 10px 15px; font-weight: 700; color: #1a237e; }
     .subject-body { padding: 14px 15px 8px; }
-    .krp-row {
-      display: grid; grid-template-columns: 30px 1fr 1fr 1fr 1fr;
-      gap: 10px; align-items: end; margin-bottom: 14px;
+    .krp-block { margin-bottom: 16px; }
+    .krp-row-top {
+      display: grid; grid-template-columns: 30px 1fr 1fr 1fr;
+      gap: 10px; align-items: end; margin-bottom: 10px;
+    }
+    .krp-row-bottom {
+      display: grid; grid-template-columns: 30px 1fr 1fr;
+      gap: 10px; align-items: end;
     }
     .krp-num {
       width: 28px; height: 28px; background: #1a237e; color: #fff;
@@ -114,7 +119,8 @@
     }
     @media (max-width: 700px) {
       .row-two { grid-template-columns: 1fr; }
-      .krp-row { grid-template-columns: 28px 1fr 1fr; }
+      .krp-row-top    { grid-template-columns: 30px 1fr 1fr; }
+      .krp-row-bottom { grid-template-columns: 30px 1fr 1fr; }
     }
 
     @media (max-width: 600px) {
@@ -126,22 +132,18 @@
       .filter-group { gap: 10px; }
       .filter-pill  { flex: 1; justify-content: center; padding: 12px 10px; font-size: 15px; }
 
-      /* KRP row — vertical stack on mobile */
-      .krp-row {
-        display: block;
+      /* KRP block — vertical stack on mobile */
+      .krp-block {
         background: #f8f9ff;
         border: 1px solid #e8eaf6;
         border-radius: 8px;
         padding: 12px 12px 4px;
         margin-bottom: 12px;
       }
-      .krp-num {
-        display: inline-flex;
-        margin-bottom: 10px;
-      }
-      .krp-row .field-group {
-        margin-bottom: 10px;
-      }
+      .krp-row-top, .krp-row-bottom { display: block; }
+      .krp-num { display: inline-flex; margin-bottom: 10px; }
+      .krp-row-top .field-group,
+      .krp-row-bottom .field-group { margin-bottom: 10px; }
 
       .note-box { font-size: 12px; }
       .submit-btn { font-size: 15px; padding: 13px; }
@@ -244,7 +246,7 @@
 
 <script>
   // ── GAS endpoint — update this URL after every new GAS deployment ──
-  var GAS_URL = 'https://script.google.com/macros/s/AKfycbye1qA3M9g1UpogyjbwpewkUUa9EELeddRacCGwp8GmengDdQh7DeUC7xsE-W0Bgc2XKw/exec';
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbxsiMqr--FLobW3e-yzt2zC7V9sKTKDQyUEFxbyfjJnOZw_dXtc1fqCL9MuroFQ6jmclg/exec';
 
   var subjects9 = [
     { key: 'hindi',    label: 'Hindi (हिन्दी)' },
@@ -282,12 +284,18 @@
   function krpRowHtml(cardId, subjKey, num) {
     var p = cardId + '_' + subjKey + '_' + num;
     var nameLabel = num === 1 ? 'Teacher Name *' : 'Teacher Name (DIET) *';
-    return '<div class="krp-row">' +
-      '<div class="krp-num">' + num + '</div>' +
-      fgEng(p+'_name',  'text',  nameLabel,       'Full name in English') +
-      fgDesig(p+'_desig') +
-      fgEng(p+'_school', 'text', 'School Name <span class="req">*</span>', 'School name in English') +
-      fgEmail(p+'_email') + fgMob(p+'_mob') +
+    return '<div class="krp-block">' +
+      '<div class="krp-row-top">' +
+        '<div class="krp-num">' + num + '</div>' +
+        fgEng(p+'_name',  'text', nameLabel, 'Full name in English') +
+        fgDesig(p+'_desig') +
+        fgEng(p+'_school', 'text', 'School Name <span class="req">*</span>', 'School name in English') +
+      '</div>' +
+      '<div class="krp-row-bottom">' +
+        '<div></div>' +
+        fgEmail(p+'_email') +
+        fgMob(p+'_mob') +
+      '</div>' +
     '</div>';
   }
 
